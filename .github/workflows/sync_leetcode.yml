@@ -1,0 +1,36 @@
+name: Sync LeetCode Solutions
+
+on:
+  workflow_dispatch: # manual run
+  schedule:
+    - cron: "0 0 * * 0" # every Sunday at midnight
+
+permissions:
+  contents: write # allow push
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: LeetCode Sync
+        uses: joshcai/leetcode-sync@v1.7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          leetcode-csrf-token: ${{ secrets.LEETCODE_CSRF_TOKEN }}
+          leetcode-session: ${{ secrets.LEETCODE_SESSION }}
+          destination-folder: synced-problems # new folder
+
+      - name: Commit & Push Changes
+        run: |
+          git config --local user.email "fallforthat@gmail.com"
+          git config --local user.name "thnhtus"
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git add .
+            git commit -m "chore: sync leetcode solutions"
+            git push
+          else
+            echo "✅ No changes to commit"
+          fi

@@ -1,0 +1,30 @@
+# leetcode.yaml
+
+# Directory to put all problems
+directory: synced-problems
+
+# File naming template
+filename: "{{title_slug}}.{{lang_ext}}"
+
+# Folder structure (custom)
+# Normal problems → problems/{level}/{lang}
+# Study plan problems → study-plans/{plan_slug}/{level}/{lang}
+path: |
+  {% if study_plan %}
+  study-plans/{{study_plan}}/{{lang}}
+  {% else %}
+  synced-problems/{{lang}}
+  {% endif %}
+
+readme:
+  enabled: true
+  file: README.md
+  template: README.md
+
+# Sync filters
+filters:
+  status: all # only accepted submissions (can use: all, ac, notac)
+
+# List study plans you want synced
+study_plans:
+  - top-sql-50
